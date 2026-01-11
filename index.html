@@ -93,6 +93,39 @@
     </div>
   </div>
 
+  <!-- 登录模态 -->
+  <div id="loginModal" class="modal" onclick="modalBackgroundClick(event,'loginModal')">
+    <div class="modal-content" style="background:var(--panel);padding:16px;border-radius:10px;max-width:420px;">
+      <h3>登录</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <input id="loginEmail" placeholder="邮箱（用户名）" />
+        <input id="loginPass" placeholder="密码" type="password" />
+        <div id="loginError" style="color:#f87171"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="closeModalById('loginModal')">取消</button>
+          <button onclick="submitLogin()">登录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 注册模态 -->
+  <div id="registerModal" class="modal" onclick="modalBackgroundClick(event,'registerModal')">
+    <div class="modal-content" style="background:var(--panel);padding:16px;border-radius:10px;max-width:420px;">
+      <h3>注册</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <input id="regEmail" placeholder="邮箱（将作为用户名）" />
+        <input id="regPass" placeholder="密码（至少6位）" type="password" />
+        <input id="regPass2" placeholder="确认密码" type="password" />
+        <div id="regError" style="color:#f87171"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onclick="closeModalById('registerModal')">取消</button>
+          <button onclick="submitRegister()">注册</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <template id="cardTpl">
     <article class="card">
       <div class="card-image"><img src="" alt="img" /></div>
