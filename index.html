@@ -1,114 +1,123 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>流光相册（去中心化）</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!-- GunJS + SEA + WebRTC -->
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhotoShare - 照片分享社区</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
 </head>
-<body>
-  <header class="topbar">
-    <div class="brand">流光相册</div>
-    <div class="searchbar">
-      <input id="searchInput" placeholder="搜索关键词或用户名..." />
-      <button id="searchBtn">搜索</button>
+<body class="theme-dark">
+    <!-- 加载动画 -->
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+        <p>正在加载...</p>
     </div>
-    <div class="controls">
-      <button id="themeBtn">主题</button>
-      <button id="uploadBtn">上传</button>
-      <button id="profileBtn">个人</button>
-    </div>
-  </header>
 
-  <main class="container">
-    <aside class="leftpanel">
-      <div class="card profile-card" id="profileCard">
-        <!-- 登录/注册或用户信息 -->
-      </div>
-
-      <div class="card stats-card" id="statsCard">
-        <h3>统计</h3>
-        <div id="statsContent">加载中...</div>
-      </div>
-
-      <div class="card hot-card">
-        <h3>热门图片</h3>
-        <div id="hotList"></div>
-      </div>
-
-      <div class="card help-card">
-        <h3>使用提示</h3>
-        <ul>
-          <li>注册：用户名+密码（也可用邮箱登录）</li>
-          <li>上传：必须填写至少一个关键词</li>
-          <li>隐藏图片：只有你能查看（加密）</li>
-          <li>喜欢/取消喜欢会实时同步</li>
-        </ul>
-      </div>
-    </aside>
-
-    <section class="feed" id="feed">
-      <!-- 照片流 -->
-    </section>
-
-    <aside class="rightpanel">
-      <div class="card upload-card" id="uploadCard" hidden>
-        <h3>上传图片</h3>
-        <input type="file" id="fileInput" accept="image/*" />
-        <input id="photoTitle" placeholder="标题 (可选)" />
-        <input id="photoKeywords" placeholder="关键词，用逗号分隔（至少一个）" />
-        <label><input type="checkbox" id="photoHidden" /> 隐藏 (只有我能看)</label>
-        <button id="doUploadBtn">上传并发布</button>
-        <button id="closeUploadBtn">关闭</button>
-        <div id="uploadStatus"></div>
-      </div>
-
-      <div class="card login-card" id="loginCard">
-        <h3>登录 / 注册</h3>
-        <input id="loginAlias" placeholder="用户名 或 邮箱" />
-        <input id="loginPass" type="password" placeholder="密码" />
-        <div class="login-actions">
-          <button id="loginBtn">登录</button>
-          <button id="registerBtn">注册</button>
+    <!-- 顶部导航 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">📸 PhotoShare</h1>
+            <div class="nav-menu">
+                <button id="themeToggle" class="btn-icon" title="切换主题">🌙</button>
+                <button id="searchBtn" class="btn-icon" title="搜索">🔍</button>
+                <button id="uploadBtn" class="btn-icon" title="上传照片">➕</button>
+                <button id="profileBtn" class="btn-icon" title="个人中心">👤</button>
+            </div>
         </div>
-        <div class="login-extra">
-          <button id="logoutBtn" hidden>登出</button>
-          <button id="editProfileBtn" hidden>编辑资料</button>
-          <button id="adminDeleteBtn" title="管理员删除模式">管理员</button>
-        </div>
-        <div id="loginMsg"></div>
-      </div>
+    </nav>
 
-      <div class="card profile-edit-card" id="profileEditCard" hidden>
-        <h3>编辑个人信息</h3>
-        <input id="editName" placeholder="显示名" />
-        <input id="editBio" placeholder="简介" />
-        <input id="editAvatarFile" type="file" accept="image/*" />
-        <button id="saveProfileBtn">保存</button>
-        <button id="cancelEditProfileBtn">取消</button>
-        <div id="profileMsg"></div>
-      </div>
-    </aside>
-  </main>
-
-  <!-- 图片查看模态 -->
-  <div id="viewer" class="viewer" hidden>
-    <div class="viewer-backdrop" id="viewerBackdrop"></div>
-    <div class="viewer-body">
-      <button id="viewerClose">×</button>
-      <img id="viewerImg" src="" alt="大图" />
-      <div id="viewerMeta"></div>
+    <!-- 搜索栏 -->
+    <div id="searchBar" class="search-bar hidden">
+        <input type="text" id="searchInput" placeholder="搜索关键词或用户名...">
+        <button id="searchConfirm">搜索</button>
     </div>
-  </div>
 
-  <footer class="footer">
-    © 流光相册 · 去中心化演示 · 请使用 HTTPS 访问
-  </footer>
+    <!-- 主要内容区 -->
+    <main class="main-content">
+        <!-- 标签页 -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="hot">热门</button>
+            <button class="tab-btn" data-tab="latest">最新</button>
+            <button class="tab-btn" data-tab="following">关注</button>
+        </div>
 
-  <script src="app.js"></script>
+        <!-- 图片网格 -->
+        <div id="photoGrid" class="photo-grid">
+            <!-- 动态加载图片 -->
+        </div>
+
+        <!-- 加载更多 -->
+        <div id="loadMore" class="load-more">
+            <button class="btn-primary">加载更多</button>
+        </div>
+    </main>
+
+    <!-- 上传模态框 -->
+    <div id="uploadModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>上传照片</h2>
+            <form id="uploadForm">
+                <div class="upload-area" id="uploadArea">
+                    <p>点击或拖拽图片到此处</p>
+                    <input type="file" id="fileInput" accept="image/*" hidden>
+                </div>
+                <div class="form-group">
+                    <label for="photoTitle">标题：</label>
+                    <input type="text" id="photoTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="photoKeywords">关键词（用空格分隔，至少一个）：</label>
+                    <input type="text" id="photoKeywords" required placeholder="例如：风景 日落 海滩">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="isPrivate"> 设为私密（仅自己可见）
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">上传</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 图片详情模态框 -->
+    <div id="photoModal" class="modal hidden">
+        <div class="modal-content photo-modal-content">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="" alt="">
+            <div class="photo-info">
+                <h3 id="photoTitleModal"></h3>
+                <p id="photoKeywordsModal"></p>
+                <div class="photo-actions">
+                    <button id="likeBtn" class="btn-like">❤️ <span id="likeCount">0</span></button>
+                    <button id="userBtn" class="btn-user">👤 <span id="photoUser"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 个人中心模态框 -->
+    <div id="profileModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="profileContent">
+                <!-- 动态加载个人中心内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理员面板 -->
+    <div id="adminPanel" class="admin-panel hidden">
+        <h3>管理员面板</h3>
+        <button id="syncBtn" class="btn-primary">同步数据到GitHub</button>
+        <button id="loadFromGithubBtn" class="btn-primary">从GitHub加载数据</button>
+        <div id="adminStats"></div>
+    </div>
+
+    <script src="idb.js"></script>
+    <script src="crypto.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
