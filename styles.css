@@ -1,51 +1,64 @@
 :root{
-  --bg:#0f1722; --panel:#0b1220; --card:#0f1a2a; --text:#e6eef8; --muted:#9fb3cf; --accent:#60a5fa;
+  --bg:#0f1724; --card:#0b1220; --text:#e6eef8; --accent:#7c5cff;
+  --muted:#9fb1d8; --glass: rgba(255,255,255,0.03);
+  --white-mode-bg:#ffffff; --white-mode-text:#0b1220;
 }
-[data-theme="light"]{ --bg:#f3f6fb; --panel:#ffffff; --card:#ffffff; --text:#0b1220; --muted:#4b5563; --accent:#2563eb; }
-[data-theme="white"]{ --bg:#ffffff; --panel:#ffffff; --card:#ffffff; --text:#0b1220; --muted:#374151; --accent:#1d4ed8; }
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:Inter,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(135deg,#021026 0%, #08162a 40%, #0a1830 100%);
+  color:var(--text); min-height:100vh; display:flex; flex-direction:column;
+}
 
-*{box-sizing:border-box;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
-html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#071028);color:var(--text)}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(0,0,0,0.12)}
-.brand{font-weight:700;font-size:20px;cursor:pointer}
-.searchbar{flex:1;display:flex;gap:6px;max-width:720px;margin:0 12px}
-.searchbar input{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);color:var(--text)}
-.searchbar button{padding:8px 10px;border-radius:8px;border:none;background:var(--accent);color:white}
-.top-actions{display:flex;align-items:center;gap:8px}
-.top-actions select, .top-actions button{padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:var(--text)}
+/* Topbar */
+.topbar{
+  display:flex; align-items:center; gap:12px; padding:12px 16px; background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(0,0,0,0.05));
+  backdrop-filter: blur(6px);
+}
+.brand{font-weight:700; font-size:1.2rem; color:var(--accent)}
+.searchbar{flex:1; display:flex; gap:6px}
+.searchbar input{flex:1; padding:8px 10px; border-radius:8px; border: none; background:var(--glass); color:var(--text)}
+.searchbar button{padding:8px 10px; border-radius:8px; border:none; background:var(--accent); color:white}
 
-.container{display:grid;grid-template-columns:260px 1fr 320px;gap:14px;padding:16px}
-.leftpanel, .rightpanel{background:var(--panel);border-radius:10px;padding:12px}
-.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:8px;background:transparent}
-.card{background:var(--card);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-height:220px}
-.card-image img{width:100%;height:200px;object-fit:cover;display:block}
-.card-body{padding:8px}
-.card-meta{display:flex;justify-content:space-between;align-items:center}
-.author{display:flex;gap:8px;align-items:center;cursor:pointer}
-.small-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover}
-.card-actions{display:flex;gap:8px;margin-top:8px}
-.card-actions button{flex:1;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:var(--text)}
+/* layout */
+.container{display:grid; grid-template-columns:280px 1fr 320px; gap:16px; padding:16px; align-items:start;}
+.leftpanel, .rightpanel{display:flex; flex-direction:column; gap:12px}
+.card{background:rgba(255,255,255,0.03); padding:12px; border-radius:12px; box-shadow: 0 6px 18px rgba(2,6,23,0.6);}
+.profile-card .avatar{width:64px;height:64px;border-radius:12px;object-fit:cover}
+.feed{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:12px}
 
-.profile-card{display:flex;flex-direction:column;align-items:center;gap:8px}
-.avatar{width:84px;height:84px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,#1f2937,#3b82f6)}
-.profile-info{text-align:center}
-.profile-stats{font-size:13px;color:var(--muted)}
-.profile-actions button{padding:8px;border-radius:8px;border:none;background:var(--accent);color:white;margin-top:8px}
+/* photo card */
+.photo{
+  border-radius:12px; overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  display:flex; flex-direction:column;
+}
+.photo img{width:100%; height:200px; object-fit:cover; cursor:zoom-in}
+.photo .meta{padding:8px; display:flex; flex-direction:column; gap:6px}
+.photo .meta .row{display:flex; justify-content:space-between; align-items:center}
+.photo .tags{display:flex; gap:6px; flex-wrap:wrap}
+.tag{background:rgba(255,255,255,0.04); padding:4px 8px; border-radius:999px; font-size:12px}
 
-/* modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:100}
-.modal .modal-content{max-width:95%;max-height:95%;background:transparent;padding:10px;border-radius:12px}
-.modal img{max-width:100%;max-height:80vh;border-radius:8px;display:block;margin:0 auto}
-.modal .modal-meta{display:flex;justify-content:space-between;align-items:center;color:var(--text);margin-top:8px}
-
-.footer{padding:12px;text-align:center;color:var(--muted)}
+/* viewer */
+.viewer{position:fixed; inset:0; display:flex; align-items:center; justify-content:center}
+.viewer-backdrop{position:absolute; inset:0; background:rgba(0,0,0,0.6)}
+.viewer-body{position:relative; z-index:2; max-width:95%; max-height:95%; display:flex; flex-direction:column; align-items:center}
+.viewer-body img{max-width:100%; max-height:80vh; border-radius:8px}
+#viewerClose{position:absolute; right:16px; top:16px; z-index:3; background:rgba(0,0,0,0.5); color:white; border:none; border-radius:6px; padding:6px 10px}
 
 /* responsive */
-@media (max-width:900px){
-  .container{grid-template-columns:1fr;grid-auto-rows:auto}
-  .leftpanel,.rightpanel{order:2}
+@media (max-width:980px){
+  .container{grid-template-columns: 1fr; padding:12px}
+  .leftpanel, .rightpanel{order:2}
   .feed{order:1}
+  .topbar{flex-direction:column; align-items:stretch; gap:8px}
 }
 
-/* theme preview */
-.preview-box{height:80px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#0ea5a6)}
+/* light/white themes toggled via .theme-light and .theme-white on body */
+body.theme-light{
+  --bg: linear-gradient(135deg,#ebeef6,#e8f0ff);
+  --card:#ffffff; --text:#0b1220; --accent:#6a4cff; --muted:#4b5563; background:linear-gradient(135deg,#eaf2ff,#eef6ff);
+}
+body.theme-white{
+  --bg: var(--white-mode-bg); --card:#ffffff; --text:var(--white-mode-text); --accent:#ff4d6d; background:var(--white-mode-bg);
+}
+body.theme-light .card, body.theme-white .card{box-shadow: 0 6px 18px rgba(10,16,25,0.06)}
