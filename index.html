@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photopia — 去中心化照片分享</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="theme-color" content="#111827" />
+  <!-- Gun.js CDN (核心 + SEA) -->
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand" onclick="goHome()">Photopia</div>
+      <div class="searchbar">
+        <input id="searchInput" placeholder="搜索关键词或用户名..." oninput="debouncedSearch()" />
+        <button onclick="doSearch()">搜索</button>
+      </div>
+      <div class="top-actions">
+        <select id="themeSelect" onchange="changeTheme(this.value)">
+          <option value="dark">深色</option>
+          <option value="light">浅色</option>
+          <option value="white">白色</option>
+        </select>
+        <button id="btnUpload" onclick="openUpload()" title="上传照片">上传</button>
+        <div id="authArea"></div>
+      </div>
+    </header>
+
+    <main class="container">
+      <aside class="leftpanel">
+        <div class="profile-card" id="profileCard">
+          <img id="profileAvatar" class="avatar" src="" alt="avatar" />
+          <div class="profile-info">
+            <div id="profileName">未登录</div>
+            <div id="profileBio">请登录或注册</div>
+          </div>
+          <div class="profile-stats" id="profileStats"></div>
+          <div class="profile-actions" id="profileActions"></div>
+        </div>
+
+        <div class="filters">
+          <h4>热门图片</h4>
+          <div id="hotList"></div>
+        </div>
+
+        <div class="filters">
+          <h4>统计</h4>
+          <div id="globalStats">
+            加载中...
+          </div>
+        </div>
+
+      </aside>
+
+      <section class="feed" id="feedArea">
+        <!-- feed/cards here -->
+      </section>
+
+      <aside class="rightpanel">
+        <div class="uploader-card" id="uploaderCard">
+          <h4>上传新照片</h4>
+          <input id="fileInput" type="file" accept="image/*" multiple />
+          <input id="keywordsInput" placeholder="关键词，用逗号分隔（至少一个）" />
+          <label><input type="checkbox" id="privateCheck" /> 私密（仅自己可见）</label>
+          <button onclick="doUpload()">开始上传</button>
+          <div id="uploadStatus"></div>
+        </div>
+
+        <div class="theme-preview">
+          <h4>主题预览</h4>
+          <div class="preview-box" id="previewBox"></div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <div>Photopia — 去中心化照片分享 · 实时同步 · HTTPS 传输</div>
+      <div>管理员邮箱（示例）：<span id="adminEmailDisplay"></span></div>
+    </footer>
+  </div>
+
+  <!-- Image modal -->
+  <div id="imageModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="大图" />
+      <div class="modal-meta">
+        <div id="modalAuthor"></div>
+        <div id="modalActions"></div>
+      </div>
+    </div>
+  </div>
+
+  <template id="cardTpl">
+    <article class="card">
+      <div class="card-image"><img src="" alt="img" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="author" onclick="openUser(event)"><img class="small-avatar" src="" /> <span class="author-name"></span></div>
+          <div class="card-keys"></div>
+        </div>
+        <div class="card-actions">
+          <button class="like-btn">❤ <span class="like-count">0</span></button>
+          <button class="view-btn">查看</button>
+          <button class="more-btn">...</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
