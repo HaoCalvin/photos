@@ -2,12 +2,13 @@
 // 依赖：gun.js + sea.js 已在 index.html 中引入
 
 // ========== 配置 ==========
-const ADMIN_EMAIL = "admin@example.com"; // 管理员邮箱（可改）
+const ADMIN_EMAIL = "haochenxihehaohan@outlook.com"; // 管理员邮箱（可改）
 const GUN_PEERS = [
   // 使用公开的 HTTPS relay peers（这些是公共节点，用于去中心化同步）
   "https://gun-manhattan.herokuapp.com/gun",
-  "https://gun-us.herokuapp.com/gun"
-];
+  "https://gun-us.herokuapp.com/gun",
+  "https://gunjs.herokuapp.com/gun",
+  "https://gun-eu.herokuapp.com/gun"];
 
 // ========== 全局 ==========
 const gun = Gun({ peers: GUN_PEERS });
